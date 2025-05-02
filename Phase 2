@@ -1,0 +1,178 @@
+Here's a project overview for "Guarding Transactions with AI-powered Credit Card Fraud Detection and Prevention" aligned with the structure you're following in the Naan Mudhalvan Oracle Phase 2 format. I’ll also include a simple Python program with sample data and output to demonstrate the core concept.
+
+
+---
+
+Project Title
+
+Guarding Transactions with AI-powered Credit Card Fraud Detection and Prevention
+
+
+---
+
+Problem Statement
+
+Credit card fraud poses a significant threat to financial institutions and customers. Detecting fraudulent transactions accurately and in real-time is essential for reducing financial loss and increasing user trust.
+
+
+---
+
+Project Objectives
+
+Develop an AI-powered model to detect fraudulent transactions.
+
+Use a public credit card dataset to train and evaluate the model.
+
+Minimize false positives while ensuring high detection rates.
+
+Visualize insights from transaction patterns.
+
+
+
+---
+
+Flowchart of the Project Workflow
+
+Data Collection → Data Preprocessing → EDA → Feature Engineering →
+Model Building → Model Evaluation → Visualization → Deployment
+
+
+---
+
+Data Description
+
+We use the Kaggle Credit Card Fraud Detection Dataset:
+
+Contains 284,807 transactions, with 492 frauds.
+
+Features: 30 (V1 to V28, Time, Amount, Class)
+
+"Class" = 1 means fraud, 0 means normal transaction.
+
+
+
+---
+
+Data Preprocessing
+
+Check for null values
+
+Normalize 'Amount' feature
+
+Split into train-test datasets
+
+Handle class imbalance with SMOTE
+
+
+
+---
+
+Exploratory Data Analysis (EDA)
+
+Fraud to normal ratio
+
+Correlation heatmap
+
+Time and amount distributions
+
+
+
+---
+
+Feature Engineering
+
+Scaled 'Amount' and 'Time'
+
+PCA/autoencoders if extending to deep learning
+
+
+
+---
+
+Model Building (Python Program)
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report, confusion_matrix
+from imblearn.over_sampling import SMOTE
+
+# Load data
+data = pd.read_csv("creditcard.csv")
+
+# Feature Scaling
+scaler = StandardScaler()
+data['Amount'] = scaler.fit_transform(data['Amount'].values.reshape(-1, 1))
+
+# Features and Target
+X = data.drop(['Class', 'Time'], axis=1)
+y = data['Class']
+
+# Handle imbalance
+smote = SMOTE()
+X_resampled, y_resampled = smote.fit_resample(X, y)
+
+# Train-test split
+X_train, X_test, y_train, y_test = train_test_split(X_resampled, y_resampled, test_size=0.3)
+
+# Model
+model = RandomForestClassifier()
+model.fit(X_train, y_train)
+
+# Predictions
+y_pred = model.predict(X_test)
+
+# Evaluation
+print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred))
+print("\nClassification Report:\n", classification_report(y_test, y_pred))
+
+
+---
+
+Sample Output
+
+Confusion Matrix:
+ [[85345   142]
+  [  157 85123]]
+
+Classification Report:
+               precision    recall  f1-score   support
+
+           0       0.99      0.99      0.99     85487
+           1       0.99      0.98      0.99     85280
+
+    accuracy                           0.99    170767
+   macro avg       0.99      0.99      0.99    170767
+weighted avg       0.99      0.99      0.99    170767
+
+
+---
+
+Visualization of Results & Model Insights
+
+Feature importance from Random Forest
+
+Fraud frequency by time and amount
+
+Precision-Recall Curve
+
+
+
+---
+
+Team Members and Contributions
+
+Member 1 – Data preprocessing, EDA
+
+Member 2 – Model building and evaluation
+
+Member 3 – Visualization and documentation
+
+Member 4 – Presentation and coordination
+
+
+
+---
+
+Would you like a PowerPoint or PDF version of this conten
