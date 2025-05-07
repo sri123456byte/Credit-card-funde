@@ -1,0 +1,78 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+
+# Load dataset (you must have 'creditcard.csv' in your directory)
+df = pd.read_csv('creditcard.csv')
+print("✅ Dataset Loaded Successfully")
+print(df.head())
+
+# Step 1: Data Summary
+print("\n📊 Data Summary:")
+print(df.describe())
+
+# Step 2: Check for missing values
+print("\n🔍 Missing Values:")
+print(df.isnull().sum())
+
+# Step 3: Visualize the imbalance in classes
+plt.figure(figsize=(6,4))
+sns.countplot(x='Class', data=df)
+plt.title("Transaction Class Distribution (0 = Normal, 1 = Fraud)")
+plt.show()
+
+# Step 4: Correlation Matrix
+plt.figure(figsize=(12,10))
+corr = df.corr()
+sns.heatmap(corr, cmap='coolwarm', annot=False)
+plt.title("Correlation Heatmap")
+plt.show()
+
+# Step 5: Prepare data for training
+X = df.drop('Class', axis=1)
+y = df['Class']
+
+# Step 6: Train-Test Split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Step 7: Train Model (Random Forest)
+model = RandomForestClassifier(n_estimators=100, random_state=42)
+model.fit(X_train, y_train)
+print("\n✅ Model Trained Successfully")
+
+# Step 8: Make Predictions
+y_pred = model.predict(X_test)
+
+# Step 9: Evaluation
+print("\n📈 Classification Report:")
+print(classification_report(y_test, y_pred))
+
+print("✅ Accuracy Score:", accuracy_score(y_test, y_pred))
+
+# Step 10: Confusion Matrix
+cm = confusion_matrix(y_test, y_pred)
+plt.figure(figsize=(6,4))
+sns.heatmap(cm, annot=True, fmt="d", cmap='Blues', xticklabels=['Normal', 'Fraud'], yticklabels=['Normal', 'Fraud'])
+plt.title("Confusion Matrix")
+plt.xlabel("Predicted")
+plt.ylabel("Actual")
+plt.show()
+OUTPUT:
+✅ Dataset Loaded Successfully
+📊 Data Summary:
+        Time         V1         V2 ... Amount     Class
+...
+🔍 Missing Values:
+All columns: 0
+✅ Model Trained Successfully
+
+📈 Classification Report:
+              precision    recall  f1-score   support
+     0          1.00       1.00      1.00    56863
+     1          0.93       0.82      0.87       99
+
+✅ Accuracy Score: 0.9993
